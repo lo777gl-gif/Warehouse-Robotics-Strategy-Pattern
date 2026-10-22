@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-/**
+//
  * Describes WHAT robot choice must do. It only talks to RobotChoice.pick(...),
  * so the same file runs on the "before" commit (switch) and on the "after" commit (Strategy).
- */
+ 
 class RobotChoiceBehaviourTest {
     private final Point target = new Point(0, 0);
     private final BatterySensor sensor = new FakeBatterySensor(Map.of("R1", 90, "R2", 50, "R3", 10));
