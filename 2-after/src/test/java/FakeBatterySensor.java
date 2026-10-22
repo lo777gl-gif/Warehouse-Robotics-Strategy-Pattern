@@ -1,6 +1,6 @@
 import java.util.Map;
 
-// Test double: battery levels are fixed by the test, so results never change. 
+/** Test double: battery levels are fixed by the test, so results never change. */
 public class FakeBatterySensor implements BatterySensor {
     private final Map<String, Integer> levels;
 
