@@ -1,0 +1,63 @@
+@startuml
+hide empty members
+skinparam classAttributeIconSize 0
+
+interface first_strategy.RobotStrategy {
+  +choose(freeRobots, target): Optional<model.Robot>
+  +name(): String
+}
+class first_strategy.NearestRobot
+class first_strategy.MostChargedRobot
+class first_strategy.LongestIdleRobot
+class first_strategy.RobotAssigner {
+  -strategy: first_strategy.RobotStrategy
+  +setStrategy(strategy)
+  +assign(freeRobots, target)
+}
+first_strategy.RobotStrategy <|.. first_strategy.NearestRobot
+first_strategy.RobotStrategy <|.. first_strategy.MostChargedRobot
+first_strategy.RobotStrategy <|.. first_strategy.LongestIdleRobot
+first_strategy.RobotAssigner o--> first_strategy.RobotStrategy
+
+interface second_strategy.OrderStrategy {
+  +arrange(orders): List<model.Order>
+  +name(): String
+}
+class second_strategy.ArrivalOrder
+class second_strategy.SmallestFirst
+class second_strategy.SameShelfTogether
+class second_strategy.OrderPlanner {
+  -strategy: second_strategy.OrderStrategy
+  +setStrategy(strategy)
+  +plan(orders)
+}
+second_strategy.OrderStrategy <|.. second_strategy.ArrivalOrder
+second_strategy.OrderStrategy <|.. second_strategy.SmallestFirst
+second_strategy.OrderStrategy <|.. second_strategy.SameShelfTogether
+second_strategy.OrderPlanner o--> second_strategy.OrderStrategy
+
+interface model.BatterySensor {
+  +batteryLevel(robotId): int
+}
+class model.SimulatedBatterySensor
+model.BatterySensor <|.. model.SimulatedBatterySensor
+first_strategy.MostChargedRobot --> model.BatterySensor
+
+class model.Situation {
+  hour
+  queueSize
+}
+class model.StrategySelector {
+  +robotStrategyFor(situation): first_strategy.RobotStrategy
+  +orderStrategyFor(situation): second_strategy.OrderStrategy
+}
+model.StrategySelector ..> model.Situation
+model.StrategySelector ..> first_strategy.RobotStrategy : creates
+model.StrategySelector ..> second_strategy.OrderStrategy : creates
+model.StrategySelector --> model.BatterySensor
+
+class Main
+Main ..> first_strategy.RobotAssigner
+Main ..> second_strategy.OrderPlanner
+Main ..> model.StrategySelector
+@enduml
